@@ -45,3 +45,12 @@ h = legend('$e$','$e_{u_{fb}}$','$\hat{e}$','$\hat{e}_{2}$');
 h.Interpreter = 'latex';
 set(gca,'fontsize',14);
 % ylim([-15,15]);
+%%
+figure;
+h0 = plot(Err.time,[error3,error4]*1e6,'lineWidth',2);
+xlabel('time (s)');
+ylabel('error (\mum)');
+h = legend('$\hat{e}$','$\hat{e}_{2}$');
+h.Interpreter = 'latex';
+set(gca,'fontsize',14);
+% ylim([-15,15]);

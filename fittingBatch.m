@@ -1,7 +1,7 @@
 close all;
 %% data preprocessing
 % index = ilcSignal.time >= 0.02 & ilcSignal.time <= 0.07;
-indexData = 96:360;
+indexData = 95:360;
 % indexU = [96:106,158:168,283:293,347:357];
 indexU = [158:168,283:293,347:357];
 disturbance = ilcData(indexData);
@@ -72,6 +72,8 @@ for i = 0:numM
         GStableCausal = minreal(GStable*z^(-1*forwardOrder));
         GStableCausal.Variable = 'z^-1';
         [b,a] = tfdata(GStableCausal,'value');
+        mBuffer{count} = b;
+        nBuffer{count} = a;
         %%
         fittedD = filter(b,a,traj);
         tempData = [disturbance,fittedD];
@@ -104,6 +106,8 @@ plot(tempData);
 %%
 [sortedValue,index] = sort(valueBuffer);
 sortedMNBuffer = mnBuffer(index,:);
+sortedMBuffer = mBuffer(index);
+sortedNBuffer = nBuffer(index);
 figure;plot(sortedValue(1:20));
 %%
 % tempValues = ufb.signals.values * 0;

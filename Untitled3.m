@@ -1,3 +1,7 @@
+optimalB = sortedMBuffer{1};
+optimalA = sortedNBuffer{1};
+
+%%
 temp = filter(optimalB,optimalA,trajOrigin);
 figure;plot([ilcData,temp]);
 %%
@@ -9,7 +13,7 @@ figure;pzmap(GStable);
 figure;bodeplot(G,GStable);
 %%
 z = tf('z',Ts);
-compensator = 1 + 4 * (1 - z^-1);
+compensator = 1 + 4.5 * (1 - z^-1);
 GStableNew = GStable * compensator;
 %%
 ilcSignal.signals.values = temp;
