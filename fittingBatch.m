@@ -1,3 +1,7 @@
+%% 生成迭代学习信号
+set_param([modelName,'/ilcSignal'],'commented','on');
+set_param([modelName,'/GStable'],'commented','on');
+RunSimZPETC;
 close all;
 %% data preprocessing
 % index = ilcSignal.time >= 0.02 & ilcSignal.time <= 0.07;
@@ -10,13 +14,12 @@ figure;plot(disturbance);
 figure;plot(ilcData);
 %%
 trajOrigin = snap.signals.values;
-% trajOrigin = [diff(snap.signals.values);0];
+%获得超前四个伺服周期的snap信号用于拟合控制器
 trajOrigin = circshift(trajOrigin,-4);
 traj = trajOrigin(indexData);
-figure;plot(traj);
-% traj = trajData(:,3) * 1e-3;
-% traj = trajData(:,2) * 1e-3;
-%% batch processing
+% figure;plot(traj);
+
+%% batch processing， 蒙特卡洛搜索，找到最优的前馈控制器
 numM = 20;
 numN = 20;
 optimalValue = 1e20;
@@ -98,19 +101,22 @@ for i = 0:numM
         end
     end
 end
-%%
+%% 绘制拟合效果
 figure;
 tempData = [disturbance,optimalFittedD];
 plot(tempData);
 
-%%
+%% 绘制拟合残差
 [sortedValue,index] = sort(valueBuffer);
 sortedMNBuffer = mnBuffer(index,:);
 sortedMBuffer = mBuffer(index);
 sortedNBuffer = nBuffer(index);
 figure;plot(sortedValue(1:20));
-%%
-% tempValues = ufb.signals.values * 0;
-% tempValues(indexData) = optimalFittedD;
-% ilcSignal.signals.values = tempValues;
-% sim('main',[0 0.1]);
+%% 生成补偿残余跟踪误差的前馈控制器
+G = tf(optimalB,optimalA,1/5000,'variable','z^-1');
+method = 'zpetc';
+figure;pzmap(G);
+[GStable,forwardOrder] = stableApproximation(G,method);
+figure;pzmap(GStable);
+figure;bodeplot(G,GStable);
+
