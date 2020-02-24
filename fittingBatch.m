@@ -5,7 +5,7 @@ RunSimZPETC;
 close all;
 %% data preprocessing
 % index = ilcSignal.time >= 0.02 & ilcSignal.time <= 0.07;
-indexData = 95:360;
+indexData = 1:numel(Err.time);
 % indexU = [96:106,158:168,283:293,347:357];
 indexU = [158:168,283:293,347:357];
 disturbance = ilcData(indexData);

@@ -2,7 +2,7 @@ modelName = 'main';
 modelName = 'mainNewTraj';
 %%
 set_param([modelName,'/ilcSignal'],'commented','on')
-sim(modelName,[0 0.3]);
+sim(modelName,[0 0.18]);
 ufbSignal = ufb.signals.values;
 error1 = Err.signals.values;
 Sp = feedback(GpDis*GcDis,1);
@@ -13,7 +13,7 @@ set_param([modelName,'/ilcSignal'],'commented','off');
 % ufbSignal = ufb.signals.values;
 % ilcData = noncausalFiltering(ufbSignal-ufbSignal(1),inverseSp);
 ilcSignal = ufb;
-sim(modelName,[0 0.3]);
+sim(modelName,[0 0.18]);
 error2 = Err.signals.values;
 %%
 method = 'zpetc';
@@ -22,7 +22,7 @@ set_param([modelName,'/ilcSignal'],'commented','off');
 ilcData = noncausalFiltering(ufbSignal-ufbSignal(1),inverseSp);
 ilcSignal = ufb;
 ilcSignal.signals.values = ilcData;
-sim(modelName,[0 0.3]);
+sim(modelName,[0 0.18]);
 error3 = Err.signals.values;
 %%
 set_param([modelName,'/ilcSignal'],'commented','off');
@@ -33,7 +33,7 @@ ilcData = noncausalFiltering(ufbSignal-ufbSignal(1),inverseSp);
 ilcData =  ilcData + noncausalFiltering(ilcData,minreal(delta));
 ilcSignal = ufb;
 ilcSignal.signals.values = ilcData;
-sim(modelName,[0 0.3]);
+sim(modelName,[0 0.18]);
 error4 = Err.signals.values;
 %%
 figure;
